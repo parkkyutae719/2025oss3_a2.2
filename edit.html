@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어 수정 (Edit)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="my.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="index.html">
+                <i class="fas fa-book-open me-2"></i>My vocabulary
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mt-4 mb-4">단어 정보 수정: Superintendent</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <form id="wordForm" onsubmit="return handleEditSubmit(event)" class="bg-white p-4 rounded shadow-sm">
+                    
+                    <div class="mb-3">
+                        <label for="word" class="form-label fw-bold">단어 (Word) *</label>
+                        <input type="text" class="form-control" id="word" name="word" value="superintendent" required>
+                        <span id="wordError" class="error-message"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="meaning" class="form-label fw-bold">의미 (Meaning) *</label>
+                        <input type="text" class="form-control" id="meaning" name="meaning" value="관리자, 감독관" required>
+                        <span id="meaningError" class="error-message"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="level" class="form-label fw-bold">레벨 (Level) *</label>
+                            <select class="form-select" id="level" name="level" required>
+                                <option value="">-- 레벨 선택 --</option>
+                                <option value="1" selected>*** (상)</option>
+                                <option value="2">** (중)</option>
+                                <option value="3">* (하)</option>
+                            </select>
+                            <span id="levelError" class="error-message"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label fw-bold">카테고리 (Category) *</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">-- 카테고리 선택 --</option>
+                                <option value="noun" selected>명사</option>
+                                <option value="verb">동사</option>
+                                <option value="toeic">토익</option>
+                                <option value="grem">수능</option>
+                            </select>
+                            <span id="categoryError" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label fw-bold">등록일 (Date) *</label>
+                        <input type="date" class="form-control" id="date" name="date" value="2022-10-01" required>
+                        <span id="dateError" class="error-message"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example" class="form-label fw-bold">예문 (Example Sentence) *</label>
+                        <textarea class="form-control" id="example" name="example" rows="3" required>The superintendent is responsible for overseeing the entire school district.</textarea>
+                        <span id="exampleError" class="error-message"></span>
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" value="true" id="status" name="status" checked>
+                        <label class="form-check-label" for="status">
+                            암기 완료
+                        </label>
+                    </div>
+
+                    <div class="d-flex justify-content-end btn-group-custom">
+                        <button type="submit" class="btn btn-primary me-2">📝 확인 (수정)</button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='index.html'">❌ 취소</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+            
+            function setError(id, message) {
+                const errorElement = document.getElementById(id + 'Error');
+                if(errorElement) errorElement.textContent = message;
+                if (message) isValid = false;
+            }
+
+            const word = document.getElementById('word');
+            setError('word', '');
+            if (word.value.trim() === "") {
+                setError('word', "단어는 필수 입력 항목입니다.");
+            } else if (word.value.length < 2) {
+                setError('word', "단어는 최소 2자 이상이어야 합니다.");
+            }
+
+            const meaning = document.getElementById('meaning');
+            setError('meaning', '');
+            if (meaning.value.trim() === "") {
+                setError('meaning', "의미는 필수 입력 항목입니다.");
+            } else if (meaning.value.length < 2) {
+                setError('meaning', "의미는 최소 2자 이상이어야 합니다.");
+            }
+
+            const level = document.getElementById('level');
+            setError('level', '');
+            if (level.value === "") {
+                setError('level', "레벨을 선택해야 합니다.");
+            }
+            
+            const example = document.getElementById('example');
+            setError('example', '');
+            if (example.value.trim() === "") {
+                setError('example', "예문은 필수 입력 항목입니다.");
+            } else if (example.value.length < 5) {
+                setError('example', "예문은 최소 5자 이상이어야 합니다.");
+            }
+            
+            const date = document.getElementById('date');
+            setError('date', '');
+            if (date.value.trim() === "") {
+                setError('date', "등록일은 필수 입력 항목입니다.");
+            }
+            
+            return isValid;
+        }
+
+        function handleEditSubmit(event) {
+            event.preventDefault();
+
+            if (validateForm()) {
+                if (confirm("단어를 수정할까요?")) {
+                    alert("단어 정보가 수정되었습니다. (목록 페이지로 이동)");
+                    location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
